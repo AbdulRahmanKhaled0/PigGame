@@ -4,6 +4,7 @@ const holdBtn = document.querySelector('.btn--hold');
 const rollBtn = document.querySelector('.btn--roll');
 const newGameBtn = document.querySelector('.btn--new');
 const diceImg = document.querySelector('.dice');
+diceImg.classList.add('none-display');
 const totalScores = document.querySelectorAll('.score');
 const currentScores = document.querySelectorAll('.current-score');
 const players = document.querySelectorAll('.player');
@@ -18,11 +19,8 @@ for (let i = 0; i < totalScores.length; i++) {
   totalScoresValues[i] = Number(totalScoresValues[i]);
 }
 
-// let counter = 2;
 let playerActive = 0;
 const switchPlayer = function () {
-  // let playerNum = counter % 2;
-  // counter ++;
   if (players[0].classList.contains('player--active')) {
     players[0].classList.remove('player--active');
     players[1].classList.add('player--active');
@@ -38,10 +36,15 @@ const hold = function () {
   totalScores[playerActive].textContent = totalScoresValues[playerActive];
   currentScoresValues[playerActive] = 0;
   currentScores[playerActive].textContent = currentScoresValues[playerActive];
+  if (totalScoresValues[playerActive] >= 50) {
+    players[playerActive].classList.add('player--winner');
+    diceImg.classList.add('none-display');
+  }
   switchPlayer();
 };
 
 const roll = function () {
+  diceImg.classList.remove('none-display');
   let diceValue = Math.trunc(Math.random() * 6 + 1);
   console.log(diceValue);
   if (diceValue === 6) {
@@ -90,6 +93,7 @@ const newGame = function () {
     totalScores[i].textContent = 0;
     currentScoresValues[i] = 0;
     totalScoresValues[i] = 0;
+    diceImg.classList.add('none-display');
 
     if (players[1].classList.contains('player--active')) {
       players[1].classList.remove('player--active');
@@ -98,16 +102,6 @@ const newGame = function () {
     }
   }
 };
-
-// if (players[0].classList.contains('player--active')) {
-//   players[0].classList.remove('player--active');
-//   players[1].classList.add('player--active');
-//   playerActive = 1;
-// } else if (players[1].classList.contains('player--active')) {
-//   players[1].classList.remove('player--active');
-//   players[0].classList.add('player--active');
-//   playerActive = 0;
-// }
 
 rollBtn.addEventListener('click', roll);
 holdBtn.addEventListener('click', hold);
